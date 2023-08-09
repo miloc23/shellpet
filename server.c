@@ -1,8 +1,4 @@
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "helpers.h"
 
 int main()
 {
@@ -30,13 +26,14 @@ int main()
     struct sockaddr_storage client;
 
     int listen_socket = socket(AF_UNIX, SOCK_STREAM, 0);
-    struct sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-    char path[108] = "\0test\0";
-    addr.sun_path[0] = '\0';
-    strncpy(addr.sun_path+1, path+1, 5);
+    int sockaddr_len;
+    struct sockaddr_un *addr = pet__abstract_socket("test", 4, &sockaddr_len);
+    //addr.sun_family = AF_UNIX;
+    //char path[108] = "\0test\0";
+    //addr.sun_path[0] = '\0';
+    //strncpy(addr.sun_path+1, path+1, 5);
     
-    int ret = bind(listen_socket, (struct sockaddr*)&addr, sizeof(addr.sun_family) + 6);
+    int ret = bind(listen_socket, (struct sockaddr*)addr, sockaddr_len);
     
     ret = listen(listen_socket, 20);
     int addr_size = sizeof(client); 

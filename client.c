@@ -1,21 +1,15 @@
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#define BUFSIZE 1024
+#include "helpers.h"
 
 int main()
 {
     int data_socket = socket(AF_UNIX, SOCK_STREAM, 0);
-    
-    struct sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path+1, "test\0");
-    addr.sun_path[0] = '\0';    
+    int sockaddr_len = 0; 
+    struct sockaddr_un *addr = pet__abstract_socket("test", 4, &sockaddr_len); 
+    //addr.sun_family = AF_UNIX;
+    //strcpy(addr.sun_path+1, "test\0");
+    //addr.sun_path[0] = '\0';    
 
-    connect(data_socket, (struct sockaddr *)&addr, sizeof(addr.sun_family) + 6);
+    connect(data_socket, (struct sockaddr *)addr, sockaddr_len);
 
     printf("What is the command: ");
     char send_buf[BUFSIZE];
