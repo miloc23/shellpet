@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     if (!strcmp(argv[1], "pet")) {
         struct pet *pet = calloc(1, sizeof(struct pet));
         recv(data_socket, pet, sizeof(struct pet), 0);
-        printf("Pet name: %s\nPet age %d\n", pet->name, pet->age);
+        printf("Pet name: %s\nPet age %f\n", pet->name, pet->age);
     } else if (!strcmp(argv[1], "init")) {
         printf("Name: ");
         fgets(send_buf, 32, stdin);
